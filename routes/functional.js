@@ -57,7 +57,7 @@ router.post('/signup', (req, res) => {
       } else {
         res.status(403).json({
           status: 403,
-          message: `An account with an email of: ${req.body.email} already exsists`,
+          message: `An account with an email of: ${req.body.email} already exists`,
         });
       }
     });

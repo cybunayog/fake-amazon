@@ -1,9 +1,8 @@
 const router = require('express').Router();
 const moment = require('moment');
 const { v4: uuid } = require('uuid');
-const models = require('../models.js');
-const validation = require('../jsonValidation.js');
-const bcrypt = require('../bcrypt.js');
+
+const { models, validation, bcrypt } = require('../helpers');
 
 router.get('/whoami', (req, res) => {
   if (req.session && req.session.email !== null && req.session.email !== undefined) {

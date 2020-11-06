@@ -1,14 +1,16 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const dbConnect = require('./dbConnect.js');
+const { dbConnect, session } = require('./helpers');
 
 // Connect to the DB 
 dbConnect.connect();
 
 const app = express();
 app.use(bodyParser.json());
-app.use(require('./session.js'));
+app.use(session);
 app.use(require('./routes/functional.js'));
+app.use('/item', require('./routes/item.js'));
+app.use('/user', require('./routes/user.js'));
 
 app.get('/ping', (req, res) => {
   res.status(200).send('pong');

@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const moment = require('moment');
+const speakeasy = require('speakeasy');
 const { v4: uuid } = require('uuid');
 
 const { models, validation, bcrypt } = require('../helpers');
@@ -86,17 +87,25 @@ router.post('/signup', (req, res) => {
 });
 
 router.post('/login', (req, res) => {
-  const valid = validation.validateLogin(req.body);
+  //const valid = validation.validateLogin(req.body);
   if (req.session && req.session.email !== null && req.session.email !== undefined) {
     res.redirect(301, '/');
-  } else if (valid === null) {
+    //} else if (valid === null) {
     models.account.findOne({
       email: req.body.email,
     }, { password: 1, _id: 0 }, (err, account) => {
       if (account) {
         if (bcrypt.compare(req.body.password, account.password)) {
-          req.session.email = req.body.email;
-          res.redirect(301, '/');
+          const verified = speakeasy.totp.verify({
+            secret: account.secret,
+            encoding: 'base32',
+            token: req.body.secret
+          });
+          if (verified) {
+            req.session.email = req.body.email;
+            res.redirect(301, '/');
+          }
+          
         } else {
           res.status(400).send('Incorrect username or password.');
         }
@@ -104,9 +113,10 @@ router.post('/login', (req, res) => {
         res.status(400).send('Incorrect username or password.');
       }
     });
-  } else {
-    res.status(403).send(valid);
   }
+  // } else {
+  //   res.status(403).send(valid);
+  // }
 });
 
 module.exports = router;

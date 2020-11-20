@@ -4,5 +4,4 @@ exports.env = require('./env.js');
 exports.validation = require('./jsonValidation.js');
 exports.models = require('./models.js');
 exports.session = require('./session.js');
-exports.validation = require('./jsonValidation.js');
-// exports.multer = require('./multer.js');
+exports.multer = require('./multer.js');

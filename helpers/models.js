@@ -13,7 +13,7 @@ const accountSchema = mongoose.Schema({
     items: Array,
   },
   lists: Array,
-  orders: Array,
+  orders: [String],
   picture: {
     profile: String,
     background: String,
@@ -23,12 +23,13 @@ const accountSchema = mongoose.Schema({
 });
 
 const itemSchema = mongoose.Schema({
+  uuid: String,
   seller: String,
   name: String,
   price: Number,
   currency: String,
   description: String,
-  reviews: String,
+  reviews: Array,
 });
 
 module.exports = {
